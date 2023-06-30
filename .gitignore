@@ -1,0 +1,5 @@
+# User-specific stuff
+.idea/
+.vscode/
+# General
+.DS_Store
