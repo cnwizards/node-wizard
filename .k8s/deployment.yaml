@@ -22,7 +22,7 @@ spec:
     spec:
       serviceAccountName: node-wizard
       containers:
-      - image: docker.io/pehli/node-wizard:latest
+      - image: pehli/node-wizard:d00ded
         imagePullPolicy: Always
         name: node-wizard
         ports:
