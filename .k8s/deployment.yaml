@@ -20,9 +20,11 @@ spec:
       labels:
         app: node-wizard
     spec:
+      imagePullSecrets:
+        - name: ghcr-sec
       serviceAccountName: node-wizard
       containers:
-      - image: pehli/node-wizard:d00ded
+      - image: ghcr.io/pehlicd/node-wizard:dev-latest
         imagePullPolicy: Always
         name: node-wizard
         ports:
