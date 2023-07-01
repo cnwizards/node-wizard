@@ -5,13 +5,13 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/pehlicd/node-wizard/pkg"
 	"github.com/pehlicd/node-wizard/pkg/logger"
+	"github.com/pehlicd/node-wizard/pkg/utils"
 )
 
 func main() {
 	logger.SetupLogger()
-	err := pkg.DrainNode()
+	err := utils.DrainNode()
 	if err != nil {
 		log.Panicf("Error draining node: %v", err)
 	}
