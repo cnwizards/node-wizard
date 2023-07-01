@@ -1,7 +1,11 @@
 package main
 
-import "github.com/pehlicd/node-wizard/pkg"
+import (
+	"github.com/pehlicd/node-wizard/pkg"
+	"github.com/pehlicd/node-wizard/pkg/logger"
+)
 
 func main() {
-	go pkg.Run()
+	logger.SetupLogger()
+	pkg.Run()
 }

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: node-wizard
   namespace: node-wizard
-  matchLabels:
+  labels:
     app: node-wizard
 spec:
   progressDeadlineSeconds: 600
