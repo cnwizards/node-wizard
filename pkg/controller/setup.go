@@ -23,7 +23,7 @@ func Setup() *Controller {
 
 	// Define resources to watch.
 	var resource = Resource{
-		Group:    "core",
+		Group:    "",
 		Version:  "v1",
 		Resource: "nodes",
 	}
