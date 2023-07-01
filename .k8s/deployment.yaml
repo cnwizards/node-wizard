@@ -3,9 +3,11 @@ kind: Deployment
 metadata:
   name: node-wizard
   namespace: node-wizard
+  matchLabels:
+    app: node-wizard
 spec:
   progressDeadlineSeconds: 600
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 10
   selector:
     matchLabels:

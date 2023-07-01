@@ -31,7 +31,7 @@ func OnUpdate(_, obj interface{}) error {
 			if condition.Type == corev1.NodeReady {
 				log.Debugf("Node condition type is %s", condition.Type)
 				log.Infof("Node %s is not ready for reason %s so draining the node.", node.Name, condition.Reason)
-				err := utils.DrainNode()
+				err := utils.DrainNode(node.Name)
 				if err != nil {
 					log.Errorf("Error draining node: %v", err)
 				}
