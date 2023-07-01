@@ -4,10 +4,11 @@ import (
 	"context"
 	"time"
 
+	"github.com/pehlicd/node-wizard/pkg/utils"
 	log "github.com/sirupsen/logrus"
-	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/client-go/dynamic"
-	"k8s.io/client-go/dynamic/dynamicinformer"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/client-go/informers"
 	"k8s.io/client-go/tools/cache"
 )
 
@@ -15,65 +16,68 @@ const (
 	informerResyncPeriod = time.Second * 10
 )
 
-type Resource struct {
-	Group    string
-	Version  string
-	Resource string
-}
-
 type Controller struct {
-	Client            DynamicClient
-	StopCtx           context.Context
-	Indexers          cache.Indexers
 	Informer          cache.SharedIndexInformer
-	EventHandler      cache.ResourceEventHandlerFuncs
-	StopControllerCh  chan struct{} // Channel to receive stop signal.
-	ControllerStateCh chan struct{} // Channel to signal the controller has stopped.
+	StopCtx           context.Context
+	StopControllerCh  chan struct{}
+	ControllerStateCh chan struct{}
 }
 
-type DynamicClient interface {
-	dynamic.Interface
-}
+func Setup() *Controller {
 
-func NewController(client DynamicClient, stopCtx context.Context, indexers cache.Indexers,
-	resource Resource, eventHandler cache.ResourceEventHandlerFuncs) (*Controller, error) {
-
-	controlFactory := dynamicinformer.NewDynamicSharedInformerFactory(
-		client, informerResyncPeriod,
-	)
-	informer := controlFactory.ForResource(schema.GroupVersionResource{
-		Group:    resource.Group,
-		Version:  resource.Version,
-		Resource: resource.Resource,
-	}).Informer()
-	_, err := informer.AddEventHandler(eventHandler)
+	// Initialize the Kubernetes clientset and other necessary variables
+	clientset, err := utils.GetKubernetesClient()
 	if err != nil {
-		log.Errorf("Error adding event handler: %s", err)
-		return nil, err
+		panic(err.Error())
 	}
-	log.Debugf("Added event handler for resource successfully: %s", resource.Resource)
+
+	controlFactory := informers.NewSharedInformerFactory(clientset, informerResyncPeriod)
+	controller := controlFactory.Core().V1().Nodes().Informer()
+	defer runtime.HandleCrash()
+	_, err = controller.AddEventHandler(cache.ResourceEventHandlerFuncs{
+		AddFunc: func(obj interface{}) {
+			err := OnAdd(obj)
+			if err != nil {
+				runtime.HandleError(err)
+			}
+		},
+		DeleteFunc: func(obj interface{}) {
+			err := OnDelete(obj)
+			if err != nil {
+				runtime.HandleError(err)
+			}
+		},
+		UpdateFunc: func(_, obj interface{}) {
+			node := obj.(*corev1.Node)
+			err := OnUpdate(node, clientset)
+			if err != nil {
+				runtime.HandleError(err)
+			}
+		},
+	})
+	if err != nil {
+		log.Errorf("An error happened while adding the event handlers. See detailed: %v", err)
+		runtime.HandleError(err)
+	}
 
 	return &Controller{
-		Client:            client,
-		StopCtx:           stopCtx,
-		Indexers:          indexers,
-		Informer:          informer,
-		EventHandler:      eventHandler,
+		Informer:          controller,
+		StopCtx:           context.Background(),
 		StopControllerCh:  make(chan struct{}),
 		ControllerStateCh: make(chan struct{}),
-	}, nil
+	}
 }
 
 func (c *Controller) Run() {
 	defer func() {
 		close(c.ControllerStateCh)
-		log.Info("Controller stopped")
+		log.Infof("Controller stopped unexpectedly.") // Might not be unexpected :D
 	}()
+	defer runtime.HandleCrash()
 
-	// Start the informer.
 	go c.Informer.Run(c.StopCtx.Done())
 	if !cache.WaitForCacheSync(c.StopCtx.Done(), c.Informer.HasSynced) {
-		log.Panic("Timed out waiting for cache to sync")
+		log.Errorf("Timed out waiting for caches to sync")
 	}
 
 	// Wait for a signal to stop the controller.

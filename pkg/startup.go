@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/pehlicd/node-wizard/pkg/controller"
+	"github.com/pehlicd/node-wizard/pkg/logger"
 	"github.com/pehlicd/node-wizard/pkg/utils"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -20,6 +21,7 @@ const (
 )
 
 func Run() {
+	logger.SetupLogger()
 	client, err := utils.GetKubernetesClient()
 	if err != nil {
 		log.Fatalf("Error getting kubernetes client: %v", err)
