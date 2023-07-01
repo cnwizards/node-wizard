@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"context"
-	"os"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -13,7 +12,10 @@ import (
 
 func DrainNode() error {
 	helper := BuildDrainHelper()
+	log.Debugf("Drain helper: %+v", helper)
 	node := v1.Node{ObjectMeta: metav1.ObjectMeta{Name: "minikube"}}
+	log.Debugf("Node: %+v", node)
+
 	err := drain.RunCordonOrUncordon(helper, &node, true)
 	if err != nil {
 		log.Errorf("Error cordoning node %s: %v", node.Name, err)
@@ -36,6 +38,7 @@ func BuildDrainHelper() *drain.Helper {
 	if err != nil {
 		panic(err.Error())
 	}
+
 	return &drain.Helper{
 		Ctx:                 context.Background(),
 		Client:              clientset,
@@ -44,7 +47,7 @@ func BuildDrainHelper() *drain.Helper {
 		IgnoreAllDaemonSets: true,
 		DeleteEmptyDirData:  true,
 		Timeout:             100 * time.Second,
-		Out:                 os.Stdout,
-		ErrOut:              os.Stderr,
+		Out:                 log.StandardLogger().Out,
+		ErrOut:              log.StandardLogger().Out,
 	}
 }

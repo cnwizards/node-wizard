@@ -23,7 +23,7 @@ func GetKubernetesClient() (*kubernetes.Clientset, error) {
 func GetClusterConfig() (*rest.Config, error) {
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		log.Fatalf("Error getting cluster config: %v", err)
+		log.Panicf("Error getting cluster config: %v", err)
 		return nil, err
 	}
 	return config, nil
