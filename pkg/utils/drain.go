@@ -10,10 +10,10 @@ import (
 	"k8s.io/kubectl/pkg/drain"
 )
 
-func DrainNode() error {
+func DrainNode(nodeName string) error {
 	helper := BuildDrainHelper()
 	log.Debugf("Drain helper: %+v", helper)
-	node := v1.Node{ObjectMeta: metav1.ObjectMeta{Name: "minikube"}}
+	node := v1.Node{ObjectMeta: metav1.ObjectMeta{Name: nodeName}}
 	log.Debugf("Node: %+v", node)
 
 	err := drain.RunCordonOrUncordon(helper, &node, true)
