@@ -23,6 +23,17 @@ rules:
       - update
       - patch
   - apiGroups:
+      - "apps"
+    resources:
+      - daemonsets
+    verbs:
+      - get
+      - list
+      - watch
+      - delete
+      - update
+      - patch
+  - apiGroups:
       - ""
     resources:
       - nodes

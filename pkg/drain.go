@@ -24,6 +24,7 @@ func DrainNode() error {
 	err = drain.RunNodeDrain(helper, node.Name)
 	if err != nil {
 		log.Errorf("Error draining node %s: %v", node.Name, err)
+		return err
 	}
 	log.Infof("Node %s drained", node.Name)
 
@@ -41,6 +42,7 @@ func BuildDrainHelper() *drain.Helper {
 		Force:               true,
 		GracePeriodSeconds:  0,
 		IgnoreAllDaemonSets: true,
+		DeleteEmptyDirData:  true,
 		Timeout:             100 * time.Second,
 		Out:                 os.Stdout,
 		ErrOut:              os.Stderr,
