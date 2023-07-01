@@ -15,24 +15,15 @@ rules:
     resources:
       - pods
       - pods/log
+      - pods/eviction
     verbs:
-      - get
-      - list
-      - watch
-      - delete
-      - update
-      - patch
+      - '*'
   - apiGroups:
       - "apps"
     resources:
       - daemonsets
     verbs:
-      - get
-      - list
-      - watch
-      - delete
-      - update
-      - patch
+      - '*'
   - apiGroups:
       - ""
     resources:
