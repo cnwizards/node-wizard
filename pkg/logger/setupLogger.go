@@ -8,23 +8,16 @@ import (
 
 func SetupLogger() {
 	logLevel, _ := os.LookupEnv("LOG_LEVEL")
-
-	logrus := log.New()
-	logrus.SetFormatter(&log.TextFormatter{
-		DisableColors: true,
-		FullTimestamp: true,
-	})
-
 	switch logLevel {
 	case "trace":
-		logrus.SetLevel(log.TraceLevel)
+		log.SetLevel(log.TraceLevel)
 	case "debug":
-		logrus.SetLevel(log.DebugLevel)
+		log.SetLevel(log.DebugLevel)
 	case "warn":
-		logrus.SetLevel(log.WarnLevel)
+		log.SetLevel(log.WarnLevel)
 	case "error":
-		logrus.SetLevel(log.ErrorLevel)
+		log.SetLevel(log.ErrorLevel)
 	default:
-		logrus.SetLevel(log.InfoLevel)
+		log.SetLevel(log.InfoLevel)
 	}
 }
