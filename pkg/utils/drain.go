@@ -5,15 +5,19 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
-	v1 "k8s.io/api/core/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kubectl/pkg/drain"
 )
 
-func DrainNode(nodeName string) error {
+type Node struct {
+	Info *corev1.Node
+}
+
+func (n Node) DrainNode() error {
 	helper := BuildDrainHelper()
 	log.Debugf("Drain helper: %+v", helper)
-	node := v1.Node{ObjectMeta: metav1.ObjectMeta{Name: nodeName}}
+	node := corev1.Node{ObjectMeta: metav1.ObjectMeta{Name: n.Info.Name}}
 	log.Debugf("Node: %+v", node)
 
 	err := drain.RunCordonOrUncordon(helper, &node, true)

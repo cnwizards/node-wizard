@@ -49,7 +49,7 @@ func Setup() *Controller {
 		},
 		UpdateFunc: func(_, obj interface{}) {
 			node := obj.(*corev1.Node)
-			err := OnUpdate(node, clientset)
+			err := OnUpdate(node)
 			if err != nil {
 				runtime.HandleError(err)
 			}

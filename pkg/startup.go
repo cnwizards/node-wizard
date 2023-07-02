@@ -43,7 +43,7 @@ func Run() {
 		RenewDeadline:   10 * time.Second,
 		RetryPeriod:     2 * time.Second,
 		Callbacks: leaderelection.LeaderCallbacks{
-			OnStartedLeading: func(c context.Context) {
+			OnStartedLeading: func(_ context.Context) {
 				log.Infof("Started leading.")
 				//Run the controller
 				go ctr.Run()
