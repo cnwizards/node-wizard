@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: nodewizard
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: nodewizard
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: nodewizard
+    spec:
+      imagePullSecrets:
+        - name: ghcr-sec
+      serviceAccountName: {{ .Values.serviceAccountName  }}
+      containers:
+      - name: nodewizard
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: LOG_LEVEL
+          value: "debug"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+        {{- toYaml .Values.resources | nindent 10 }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

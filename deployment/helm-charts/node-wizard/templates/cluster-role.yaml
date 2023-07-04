@@ -1,0 +1,36 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.serviceAccountName  }}-cr
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - pods/log
+      - pods/eviction
+    verbs:
+      - '*'
+  - apiGroups:
+      - "apps"
+    resources:
+      - daemonsets
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: node-wizard
+version: 0.1.0
+description: Node Wizard Helm Chart
+home: https://github.com/pehlicd/node-wizard
+#maintainers:
+#  - name: 
+#    url: 
+#sources:
+#  - 
