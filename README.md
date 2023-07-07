@@ -1,3 +1,4 @@
+![Docker Build](https://github.com/cnwizards/node-wizard/actions/workflows/main.yml/badge.svg?branch=main)
 # Node Wizard
 
 ### ⚠️ This project is still under development. Please use it at your own risk. ⚠️
