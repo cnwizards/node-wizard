@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/pehlicd/node-wizard/pkg/controller"
-	"github.com/pehlicd/node-wizard/pkg/logger"
-	"github.com/pehlicd/node-wizard/pkg/utils"
+	"github.com/CNWizards/node-wizard/pkg/controller"
+	"github.com/CNWizards/node-wizard/pkg/logger"
+	"github.com/CNWizards/node-wizard/pkg/utils"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"

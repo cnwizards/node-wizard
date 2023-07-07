@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/pehlicd/node-wizard/pkg/utils"
+	"github.com/CNWizards/node-wizard/pkg/utils"
 	log "github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

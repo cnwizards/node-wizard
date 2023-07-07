@@ -14,6 +14,8 @@ Here is a list of things that need to be done before this project can be conside
   * [ ] Some counter metrics should be added like how many pods evicted, how many nodes recovered, etc.
 * [ ] Helm Chart 
   * [ ] Serve Helm Chart from Github Pages
+* [ ] Pipeline
+  * [ ] Handle versioning in pipeline.
 
 ----
 * [ ] Documentation

@@ -4,7 +4,7 @@
 
 Node Wizard Helm Chart
 
-**Homepage:** <https://github.com/pehlicd/node-wizard>
+**Homepage:** <https://github.com/CNWizards/node-wizard>
 
 ## Maintainers
 

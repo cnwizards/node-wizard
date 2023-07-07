@@ -1,4 +1,4 @@
-module github.com/pehlicd/node-wizard
+module github.com/CNWizards/node-wizard
 
 go 1.20
 

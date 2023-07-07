@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/pehlicd/node-wizard/pkg"
+	"github.com/CNWizards/node-wizard/pkg"
 )
 
 func main() {
