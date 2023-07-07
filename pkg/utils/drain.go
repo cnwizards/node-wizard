@@ -67,7 +67,7 @@ func BuildDrainHelper() *drain.Helper {
 		IgnoreAllDaemonSets: true,
 		DeleteEmptyDirData:  true,
 		Timeout:             100 * time.Second,
-		Out:                 log.StandardLogger().Out,
-		ErrOut:              log.StandardLogger().Out,
+		Out:                 log.StandardLogger().Writer(),
+		ErrOut:              log.StandardLogger().Writer(),
 	}
 }

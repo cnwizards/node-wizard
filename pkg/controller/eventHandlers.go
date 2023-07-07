@@ -24,7 +24,7 @@ func OnDelete(obj interface{}) error {
 func OnUpdate(node *corev1.Node) error {
 	nodeStruct := utils.Node{Info: node}
 	for _, condition := range node.Status.Conditions {
-		log.Debugf("Node condition: %+v", condition)
+		log.Debugf("Node %s condition: %+v", node.Name, condition)
 
 		// If the node has the label ignore it.
 		if node.Labels[IgnoreLabel] == "true" {
@@ -49,7 +49,7 @@ func OnUpdate(node *corev1.Node) error {
 			if err != nil {
 				log.Errorf("Error uncordoning the node: %v", err)
 			}
-			log.Infof("Node %s is recovered, uncordoning the node.", node.Name)
+			log.Infof("Uncordoning the node %s.", node.Name)
 		}
 	}
 
