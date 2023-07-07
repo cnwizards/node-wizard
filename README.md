@@ -1,5 +1,6 @@
 # Node Wizard
 
+### ⚠️ This project is still under development. Please use it at your own risk. ⚠️
 This is a controller that monitors the `Ready` state of the nodes. If a node is not ready, it will be cordoned off and drained. As soon as the node is ready again, it is uncorded.
 
 ## Why do we need this?
@@ -17,3 +18,4 @@ There are two main features of this controller:
 * `Time to uncordon`: The time to uncordon the recovered node can be set via an environment variable.
 * `Time to cordon`: The default node monitor grace period is 40 seconds. As this is quite a long time, the Node Wizard does not wait by default. However, it can be set via an environment variable.
 * `Metrics`: Some metrics are exposed to Prometheus.
+---
