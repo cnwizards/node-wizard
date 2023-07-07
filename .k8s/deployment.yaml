@@ -38,10 +38,6 @@ spec:
           value: "true"
         - name: FORCE_DELETE_PODS
           value: "true"
-        - name: CORDON_WAITING_TIME
-          value: "120s"
-        - name: UNCORDON_WAITING_TIME 
-          value: "120s"
         ports:
         - containerPort: 8080
           protocol: TCP

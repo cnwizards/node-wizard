@@ -51,8 +51,8 @@ func (n Node) UncordonNode() error {
 		return err
 	}
 
-	node := corev1.Node{ObjectMeta: metav1.ObjectMeta{Name: n.Info.Name}, Spec: corev1.NodeSpec{Unschedulable: false}}
-	_, err = clientset.CoreV1().Nodes().Update(context.TODO(), &node, metav1.UpdateOptions{})
+	n.Info.Spec.Unschedulable = false
+	_, err = clientset.CoreV1().Nodes().Update(context.TODO(), n.Info, metav1.UpdateOptions{})
 	if err != nil {
 		log.Errorf("Error uncordoning node %s: %v", n.Info.Name, err)
 		return err
