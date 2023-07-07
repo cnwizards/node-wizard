@@ -2,6 +2,8 @@ package utils
 
 import (
 	"context"
+	"os"
+	"strconv"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -14,13 +16,30 @@ type Node struct {
 	Info *corev1.Node
 }
 
+var (
+	IgnoreAllDaemonSets, _ = strconv.ParseBool(os.Getenv("IGNORE_ALL_DAEMONSETS"))
+	DeleteEmptyDirData, _  = strconv.ParseBool(os.Getenv("DELETE_EMPTY_DIR_DATA"))
+	ForceDeletePods, _     = strconv.ParseBool(os.Getenv("FORCE_DELETE_PODS"))
+	CordonWaitingTime      = os.Getenv("CORDON_WAITING_TIME")
+	UncordonWaitingTime    = os.Getenv("UNCORDON_WAITING_TIME")
+)
+
 func (n Node) DrainNode() error {
 	helper := BuildDrainHelper()
 	log.Debugf("Drain helper: %+v", helper)
 	node := corev1.Node{ObjectMeta: metav1.ObjectMeta{Name: n.Info.Name}}
 	log.Debugf("Node: %+v", node)
 
-	err := drain.RunCordonOrUncordon(helper, &node, true)
+	w, err := time.ParseDuration(CordonWaitingTime)
+	if err != nil {
+		log.Errorf("Error parsing waiting time: %v", err)
+		return err
+	}
+
+	log.Infof("Waiting %s before cordoning node %s.", CordonWaitingTime, node.Name)
+	time.Sleep(w)
+
+	err = drain.RunCordonOrUncordon(helper, &node, true)
 	if err != nil {
 		log.Errorf("Error cordoning node %s: %v", node.Name, err)
 		return err
@@ -43,6 +62,15 @@ func (n Node) UncordonNode() error {
 		return err
 	}
 
+	w, err := time.ParseDuration(UncordonWaitingTime)
+	if err != nil {
+		log.Errorf("Error parsing waiting time: %v", err)
+		return err
+	}
+
+	log.Infof("Waiting %s before uncordoning node %s.", UncordonWaitingTime, n.Info.Name)
+	time.Sleep(w)
+
 	n.Info.Spec.Unschedulable = false
 	_, err = clientset.CoreV1().Nodes().Update(context.TODO(), n.Info, metav1.UpdateOptions{})
 	if err != nil {
@@ -62,10 +90,10 @@ func BuildDrainHelper() *drain.Helper {
 	return &drain.Helper{
 		Ctx:                 context.Background(),
 		Client:              clientset,
-		Force:               true,
+		Force:               ForceDeletePods,
 		GracePeriodSeconds:  0,
-		IgnoreAllDaemonSets: true,
-		DeleteEmptyDirData:  true,
+		IgnoreAllDaemonSets: IgnoreAllDaemonSets,
+		DeleteEmptyDirData:  DeleteEmptyDirData,
 		Timeout:             100 * time.Second,
 		Out:                 log.StandardLogger().Writer(),
 		ErrOut:              log.StandardLogger().Writer(),
