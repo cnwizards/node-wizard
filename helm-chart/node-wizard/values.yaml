@@ -1,0 +1,28 @@
+name: node-wizard
+serviceAccountName: node-wizard
+
+replicaCount: 3
+
+image:
+  repository: ghcr.io/pehlicd/node-wizard
+  tag: dev-latest
+  pullPolicy: Always
+
+resources: {}
+#  limits:
+#    cpu: 250m
+#    memory: 512Mi
+#  requests:
+#    cpu: 100m
+#    memory: 256Mi
+
+podSecurityContext: {}
+
+containerSecurityContext: {}
+
+# Node Wizard configuration. These values must be set.
+env:
+  logLevel: "info"
+  ignoreAllDaemonsets: "true"
+  deleteEmptyDirData: "true"
+  forceDeletePods: "true"

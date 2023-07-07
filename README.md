@@ -8,9 +8,12 @@ Sometimes nodes go into `NotReady` state for some reason and the immediate respo
 ## Features?
 There are two main features of this controller:
 
-* `Graceful draining`: Graceful draining parameters can be set via a configmap. The node wizard always drains the node gracefully first.
-* `Non-graceful draining`: Non-graceful draining parameters can be set via a configmap (useful for statefulset pods that could not be gracefully evicted). If graceful eviction fails, node wizard will try non-graceful eviction if enabled.
-* `Time to uncordon`: The time to uncordon the recovered node can be set via a configmap.
-* `Time to cordon`: The default node monitor grace period is 40 seconds. As this is quite a long time, the Node Wizard does not wait by default. However, it can be set via a configmap.
-* `Metrics`: Some metrics are exposed to Prometheus.
+* `Draining`: Non-graceful draining parameters can be set via an environment variable (useful for statefulset pods that could not be gracefully evicted). If graceful eviction fails, node wizard will try non-graceful eviction if enabled.
+* `Uncordon`: The node will be uncordoned when it is ready.
 * `Ignore Some Nodes`: Some nodes can be ignored by the controller by labeling with `node-wizard/ignore=true`.
+* `Leader Election`: Application uses leader election mechanism. This is useful for high availability.
+
+## Features to be added
+* `Time to uncordon`: The time to uncordon the recovered node can be set via an environment variable.
+* `Time to cordon`: The default node monitor grace period is 40 seconds. As this is quite a long time, the Node Wizard does not wait by default. However, it can be set via an environment variable.
+* `Metrics`: Some metrics are exposed to Prometheus.

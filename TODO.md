@@ -2,17 +2,18 @@
 ## To Do's
 Here is a list of things that need to be done before this project can be considered complete.
 
-* [ ] Code review
-  * [ ] Optimizing controller code
-  * [ ] Optimizing handler logic
+* [x] Code review
+  * [x] Optimizing controller code
+  * [x] Optimizing handler logic
 ----
 
 * [ ] Feature
-  * [ x ] Graceful draining options should be tunable via a configmap
-  * [ x ] Non-graceful draining options can be enabled and should be tunable via a configmap
-  * [ ] Time to uncordon the recovered node should be tunable via a configmap
-  * [ ] Time to cordon the node should be tunable via a configmap
+  * [x] Draining options should be tunable via an environment variable
+  * [ ] Time to uncordon the recovered node should be tunable via an environment variable
+  * [ ] Time to cordon the node should be tunable via an environment variable
   * [ ] Some counter metrics should be added like how many pods evicted, how many nodes recovered, etc.
+* [ ] Helm Chart 
+  * [ ] Serve Helm Chart from Github Pages
 
 ----
 * [ ] Documentation
