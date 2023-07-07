@@ -37,6 +37,22 @@ func (n Node) DrainNode() error {
 	return nil
 }
 
+func (n Node) UncordonNode() error {
+	clientset, err := GetKubernetesClient()
+	if err != nil {
+		return err
+	}
+
+	n.Info.Spec.Unschedulable = false
+	_, err = clientset.CoreV1().Nodes().Update(context.TODO(), n.Info, metav1.UpdateOptions{})
+	if err != nil {
+		log.Errorf("Error uncordoning node %s: %v", n.Info.Name, err)
+		return err
+	}
+
+	return nil
+}
+
 func BuildDrainHelper() *drain.Helper {
 	clientset, err := GetKubernetesClient()
 	if err != nil {

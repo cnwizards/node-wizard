@@ -7,6 +7,10 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+const (
+	IgnoreLabel string = "node-wizard/ignore"
+)
+
 func OnAdd(obj interface{}) error {
 	log.Debugf("Received add event: %v", obj.(metav1.Object).GetName())
 	return nil
@@ -21,26 +25,31 @@ func OnUpdate(node *corev1.Node) error {
 	nodeStruct := utils.Node{Info: node}
 	for _, condition := range node.Status.Conditions {
 		log.Debugf("Node condition: %+v", condition)
-		// If the node is ready, and schedulable: do nothing
+
+		// If the node has the label ignore it.
+		if node.Labels[IgnoreLabel] == "true" {
+			log.Debugf("Node %s is ignored.", node.Name)
+			return nil
+		}
+
 		if condition.Type == corev1.NodeReady && condition.Status == corev1.ConditionTrue && !node.Spec.Unschedulable {
-			log.Debugf("Node %s is ready", node.Name)
-			// If the node is notReady, and schedulable: drain it and evict sts pods
-			// TODO: Add a function to evict sts pods
+			// If the node is ready, and schedulable: do nothing
+			log.Debugf("Node %s is ready and schedulable, skipping.", node.Name)
+			return nil
 		} else if condition.Type == corev1.NodeReady && condition.Status != corev1.ConditionTrue && !node.Spec.Unschedulable {
-			log.Debugf("Node %s is not ready", node.Name)
+			// If the node is notReady, and schedulable: drain it and evict sts pods
+			log.Infof("Node %s is not ready and schedulable, draining the node.", node.Name)
 			err := nodeStruct.DrainNode()
 			if err != nil {
-				log.Errorf("Error draining node: %v", err)
+				log.Errorf("Error draining the node: %v", err)
 			}
+		} else if condition.Type == corev1.NodeReady && condition.Status == corev1.ConditionTrue && node.Spec.Unschedulable {
 			// If the node is ready and cordened and do not have special label(it can be on maintenance mode): uncordon it
-		} else if condition.Type == corev1.NodeReady && condition.Status == corev1.ConditionTrue && node.Spec.Unschedulable && node.Labels["node-wizard/ignore"] != "true" {
-			//only call uncordon function
-			log.Debugf("hello %s", node.Name)
-		} else if condition.Type == corev1.NodeReady && condition.Status == corev1.ConditionTrue && node.Spec.Unschedulable && node.Labels["node-wizard/ignore"] == "true" {
-			//do nothing
-			log.Debugf("Node %s is ready and ignored", node.Name)
-		} else {
-			log.Debugf("Node %s is not ready and ignored", node.Name)
+			err := nodeStruct.UncordonNode()
+			if err != nil {
+				log.Errorf("Error uncordoning the node: %v", err)
+			}
+			log.Infof("Node %s is recovered, uncordoning the node.", node.Name)
 		}
 	}
 
