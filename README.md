@@ -10,7 +10,7 @@ Sometimes nodes go into `NotReady` state for some reason and the immediate respo
 ## Features?
 There are two main features of this controller:
 
-* `Draining`: Non-graceful draining parameters can be set via an environment variable (useful for statefulset pods that could not be gracefully evicted). If graceful eviction fails, node wizard will try non-graceful eviction if enabled.
+* `Draining`: Non-graceful draining parameters can be set via an environment variable.
 * `Uncordon`: The node will be uncordoned when it is ready.
 * `Ignore Some Nodes`: Some nodes can be ignored by the controller by labeling with `node-wizard/ignore=true`.
 * `Leader Election`: Application uses leader election mechanism. This is useful for high availability.
