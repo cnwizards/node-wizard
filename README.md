@@ -19,4 +19,8 @@ There are two main features of this controller:
 * `Time to uncordon`: The time to uncordon the recovered node can be set via an environment variable.
 * `Time to cordon`: The default node monitor grace period is 40 seconds. As this is quite a long time, the Node Wizard does not wait by default. However, it can be set via an environment variable.
 * `Metrics`: Some metrics are exposed to Prometheus.
----
+
+## How to install?
+```
+https://github.com/CNWizards/helm-charts/tree/main/charts/node-wizard
+```

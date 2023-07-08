@@ -16,8 +16,10 @@ Here is a list of things that need to be done before this project can be conside
   * [ ] Serve Helm Chart from Github Pages
 * [ ] Pipeline
   * [ ] Handle versioning in pipeline.
+  * [ ] Prevent it to build if there is no change in the code.
 
 ----
 * [ ] Documentation
+  * [ ] Add a section about how to install it
   * [ ] Fix Readme
   * [ ] Helm Chart
