@@ -9,7 +9,6 @@ import (
 	"github.com/cnwizards/node-wizard/pkg/controller"
 	"github.com/cnwizards/node-wizard/pkg/logger"
 	"github.com/cnwizards/node-wizard/pkg/utils"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,26 +20,7 @@ import (
 const (
 	LeaderElectionLockName  string = "node-wizard-lock"
 	LeaderElectionNamespace string = "node-wizard"
-	MetricsLabel            string = "node_name"
 )
-
-var drainCounter = prometheus.NewCounterVec(
-	prometheus.CounterOpts{
-		Name: "node_wizard_drain_count",
-		Help: "Number of times the drain function has been called",
-	},
-	[]string{MetricsLabel},
-)
-
-func DrainCounter(w http.ResponseWriter, r *http.Request) {
-	if r.Header.Get(MetricsLabel) == "" {
-		log.Errorf("DrainCounter called without node name in header.")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	log.Debugf("DrainCounter called for node: %s", r.Header.Get(MetricsLabel))
-	drainCounter.WithLabelValues(r.Header.Get(MetricsLabel)).Inc()
-}
 
 func Run() {
 	logger.SetupLogger()
@@ -69,8 +49,6 @@ func Run() {
 				log.Infof("Started leading.")
 				//Run the controller
 				go func() {
-					prometheus.MustRegister(drainCounter)
-					http.HandleFunc("/drain", DrainCounter)
 					http.Handle("/metrics", promhttp.Handler())
 					http.ListenAndServe(":8989", nil)
 				}()
