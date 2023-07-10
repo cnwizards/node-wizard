@@ -65,7 +65,7 @@ func IncrementDrainMetric(nodeName string) {
 	if err != nil {
 		log.Errorf("Error creating request for incrementing drain metric: %v", err)
 	}
-	req.Header.Add("node_name", nodeName)
+	req.Header.Set("node_name", nodeName)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Errorf("Error incrementing drain metric: %v", err)
