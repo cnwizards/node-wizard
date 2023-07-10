@@ -29,6 +29,11 @@ func Run() {
 		log.Fatalf("Error getting kubernetes client: %v", err)
 	}
 
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		http.ListenAndServe(":8989", nil)
+	}()
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -48,10 +53,6 @@ func Run() {
 			OnStartedLeading: func(_ context.Context) {
 				log.Infof("Started leading.")
 				//Run the controller
-				go func() {
-					http.Handle("/metrics", promhttp.Handler())
-					http.ListenAndServe(":8989", nil)
-				}()
 				go ctr.Run()
 			},
 			OnStoppedLeading: func() {
