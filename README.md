@@ -1,5 +1,5 @@
 ![Docker Build](https://github.com/cnwizards/node-wizard/actions/workflows/main.yml/badge.svg?branch=main)
-[![Go Report Card](https://goreportcard.com/badge/github.com/CNWizards/node-wizard)](https://goreportcard.com/report/github.com/CNWizards/node-wizard)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cnwizards/node-wizard)](https://goreportcard.com/report/github.com/cnwizards/node-wizard)
 # Node Wizard
 
 ### ⚠️ This project is still under development. Please use it at your own risk. ⚠️
@@ -23,5 +23,5 @@ There are two main features of this controller:
 
 ## How to install?
 ```
-https://github.com/CNWizards/helm-charts/tree/main/charts/node-wizard
+https://github.com/cnwizards/helm-charts/tree/main/charts/node-wizard
 ```
