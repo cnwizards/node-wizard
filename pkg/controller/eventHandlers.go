@@ -45,7 +45,7 @@ func OnUpdate(node *corev1.Node) error {
 			if err != nil {
 				log.Errorf("Error draining the node: %v", err)
 			}
-			IncrementDrainMetric(node.Name)
+			IncrementMetric("drain", node.Name)
 		} else if condition.Type == corev1.NodeReady && condition.Status == corev1.ConditionTrue && node.Spec.Unschedulable {
 			// If the node is ready and cordened and do not have special label(it can be on maintenance mode): uncordon it
 			err := nodeStruct.UncordonNode()
@@ -59,9 +59,9 @@ func OnUpdate(node *corev1.Node) error {
 	return nil
 }
 
-func IncrementDrainMetric(nodeName string) {
+func IncrementMetric(path string, nodeName string) {
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", "http://localhost:8989/drain", nil)
+	req, err := http.NewRequest("GET", "http://localhost:8989/"+path, nil)
 	if err != nil {
 		log.Errorf("Error creating request for incrementing drain metric: %v", err)
 	}

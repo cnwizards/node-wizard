@@ -32,14 +32,14 @@ var drainCounter = prometheus.NewCounterVec(
 	[]string{MetricsLabel},
 )
 
-func DrainCounter(w http.ResponseWriter, _ *http.Request) {
-	if w.Header().Get(MetricsLabel) == "" {
+func DrainCounter(w http.ResponseWriter, r *http.Request) {
+	if r.Header.Get(MetricsLabel) == "" {
 		log.Errorf("DrainCounter called without node name in header.")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	log.Debugf("DrainCounter called for node: %s", w.Header().Get(MetricsLabel))
-	drainCounter.WithLabelValues(w.Header().Get(MetricsLabel)).Inc()
+	log.Debugf("DrainCounter called for node: %s", r.Header.Get(MetricsLabel))
+	drainCounter.WithLabelValues(r.Header.Get(MetricsLabel)).Inc()
 }
 
 func Run() {
