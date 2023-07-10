@@ -2,6 +2,11 @@ name: Docker Build
 
 on:
   push:
+    paths-ignore:
+      - 'images/**'
+      - '*.md'
+      - '.github/**'
+      - '.gitignore'
     branches:
       - "main"
       - "dev-*"
