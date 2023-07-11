@@ -54,6 +54,9 @@ func (n Node) UncordonNode() error {
 	}
 
 	n.Info.Spec.Unschedulable = false
+	n.Info.Status = corev1.NodeStatus{}
+	// status might cause issues, so we set it to nil
+
 	_, err = clientset.CoreV1().Nodes().Update(context.TODO(), n.Info, metav1.UpdateOptions{})
 	if err != nil {
 		log.Errorf("Error uncordoning node %s: %v", n.Info.Name, err)
