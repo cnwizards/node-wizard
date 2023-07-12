@@ -16,7 +16,7 @@ There are several features that Node Wizard offers:
 * `Ignore Some Nodes`: Some nodes can be ignored by the controller by labeling with `node-wizard/ignore=true` (it can be useful for the ready nodes but some maintenance is going on).
 * `Leader Election`: Application uses leader election mechanism. This is useful for high availability.
 * `Metrics`: As now, two metrics are exposed:
-<br>
+&nbsp;
 
     | Metric Name | Metric Type | Description |
     | ----------- | ----------- | ----------- |
