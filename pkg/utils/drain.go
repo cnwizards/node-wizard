@@ -55,7 +55,7 @@ func (n Node) UncordonNode() error {
 		return err
 	}
 
-	_, err = clientset.CoreV1().Nodes().Patch(context.TODO(), n.Info.Name, types.JSONPatchType, []byte(`[{Op:"replace",Path:"/spec/unschedulable",Value:true}]`), metav1.PatchOptions{})
+	_, err = clientset.CoreV1().Nodes().Patch(context.TODO(), n.Info.Name, types.JSONPatchType, []byte(`[{op:"replace",path:"/spec/unschedulable",value:true}]`), metav1.PatchOptions{})
 	if err != nil {
 		log.Errorf("Error uncordoning node %s: %v", n.Info.Name, err)
 		return err
