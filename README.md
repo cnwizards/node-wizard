@@ -17,6 +17,7 @@ There are several features that Node Wizard offers:
 * `Leader Election`: Application uses leader election mechanism. This is useful for high availability.
 * `Metrics`: As now, two metrics are exposed:
 <br>
+
     | Metric Name | Metric Type | Description |
     | ----------- | ----------- | ----------- |
     | `node_wizard_uncordon_count` | Counter | Counter metric that shows the number of uncordon operations performed for each node. |
