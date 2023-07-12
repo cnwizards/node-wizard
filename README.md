@@ -33,4 +33,4 @@ helm repo add cnwizards https://charts.cloudnativewizards.dev
 helm install node-wizard cnwizards/node-wizard --namespace node-wizard --create-namespace
 ```
 
-### ⚠️ This project is still under development. ⚠️
+#### ⚠️ This project is still under development. ⚠️
