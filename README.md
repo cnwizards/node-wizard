@@ -11,7 +11,7 @@ Additionally, Node Wizard accounts for cases where the node may recover on its o
 ## Features
 There are several features that Node Wizard offers:
 
-* `Draining`: Non-graceful draining parameters can be set via an environment variable.
+* `Drain`: Non-graceful draining parameters can be set via an environment variable.
 * `Uncordon`: The node will be uncordoned when it is ready.
 * `Ignore Some Nodes`: Some nodes can be ignored by the controller by labeling with `node-wizard/ignore=true` (it can be useful for the ready nodes but some maintenance is going on).
 * `Leader Election`: Application uses leader election mechanism. This is useful for high availability.
