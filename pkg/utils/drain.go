@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	metrics "github.com/cnwizards/node-wizard/pkg/metrics"
 	log "github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -42,6 +43,7 @@ func (n Node) DrainNode() error {
 	}
 	log.Infof("Node %s drained", node.Name)
 
+	metrics.IncrementDrainCounter(node.Name)
 	return nil
 }
 
@@ -58,6 +60,7 @@ func (n Node) UncordonNode() error {
 		return err
 	}
 
+	metrics.IncrementUncordonCounter(n.Info.Name)
 	return nil
 }
 

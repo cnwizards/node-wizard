@@ -2,12 +2,14 @@ package pkg
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"time"
 
-	"github.com/CNWizards/node-wizard/pkg/controller"
-	"github.com/CNWizards/node-wizard/pkg/logger"
-	"github.com/CNWizards/node-wizard/pkg/utils"
+	"github.com/cnwizards/node-wizard/pkg/controller"
+	"github.com/cnwizards/node-wizard/pkg/logger"
+	"github.com/cnwizards/node-wizard/pkg/utils"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
@@ -16,8 +18,8 @@ import (
 )
 
 const (
-	LeaderElectionLockName  = "node-wizard-lock"
-	LeaderElectionNamespace = "node-wizard"
+	LeaderElectionLockName  string = "node-wizard-lock"
+	LeaderElectionNamespace string = "node-wizard"
 )
 
 func Run() {
@@ -26,6 +28,11 @@ func Run() {
 	if err != nil {
 		log.Fatalf("Error getting kubernetes client: %v", err)
 	}
+
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		http.ListenAndServe(":8989", nil)
+	}()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()

@@ -2,9 +2,10 @@ package controller
 
 import (
 	"context"
+	"reflect"
 	"time"
 
-	"github.com/CNWizards/node-wizard/pkg/utils"
+	"github.com/cnwizards/node-wizard/pkg/utils"
 	log "github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/runtime"
@@ -47,8 +48,15 @@ func Setup() *Controller {
 				runtime.HandleError(err)
 			}
 		},
-		UpdateFunc: func(_, obj interface{}) {
+		UpdateFunc: func(oldObj, obj interface{}) {
+			oldNode := oldObj.(*corev1.Node)
 			node := obj.(*corev1.Node)
+
+			if oldNode.Spec.Unschedulable == node.Spec.Unschedulable && reflect.DeepEqual(oldNode.Status.Conditions, node.Status.Conditions) {
+				log.Debugf("Node %s is not updated, skipping.", node.Name)
+				return
+			}
+
 			err := OnUpdate(node)
 			if err != nil {
 				runtime.HandleError(err)
