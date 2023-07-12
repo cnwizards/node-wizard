@@ -6,8 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"k8s.io/apimachinery/pkg/types"
-
 	metrics "github.com/cnwizards/node-wizard/pkg/metrics"
 	log "github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
@@ -55,7 +53,8 @@ func (n Node) UncordonNode() error {
 		return err
 	}
 
-	_, err = clientset.CoreV1().Nodes().Patch(context.TODO(), n.Info.Name, types.JSONPatchType, []byte(`[{"op":"replace","path":"/spec/unschedulable","value":true}]`), metav1.PatchOptions{})
+	n.Info.Spec.Unschedulable = false
+	_, err = clientset.CoreV1().Nodes().Update(context.TODO(), n.Info, metav1.UpdateOptions{})
 	if err != nil {
 		log.Errorf("Error uncordoning node %s: %v", n.Info.Name, err)
 		return err
