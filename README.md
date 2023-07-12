@@ -8,7 +8,7 @@ The purpose of Node Wizard is to automate the response to nodes entering the "No
 
 Additionally, Node Wizard accounts for cases where the node may recover on its own over time. In such situations, there may not be an immediate urgency, allowing for investigation at a later time. When the node becomes ready again, the controller automatically uncordons it.
 
-## Features?
+## Features
 There are several features that Node Wizard offers:
 
 * `Draining`: Non-graceful draining parameters can be set via an environment variable.
