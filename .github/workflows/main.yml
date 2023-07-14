@@ -47,21 +47,12 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
 
       - name: Build and push Docker image
-        if: "contains(github.ref, 'main')"
+        if: "!contains(github.ref, 'dev-*')"
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Build and push Docker image with dev tag
-        if: "contains(github.ref, 'main')"
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:dev-latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Docker image from user-dev branches

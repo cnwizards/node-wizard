@@ -1,4 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![Go version](https://img.shields.io/github/go-mod/go-version/cnwizards/node-wizard)
+![Release](https://img.shields.io/github/v/release/cnwizards/node-wizard)
 ![Docker Build](https://github.com/cnwizards/node-wizard/actions/workflows/main.yml/badge.svg?branch=main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/cnwizards/node-wizard)](https://goreportcard.com/report/github.com/cnwizards/node-wizard)
 # Node Wizard
