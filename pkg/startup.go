@@ -31,7 +31,11 @@ func Run() {
 
 	go func() {
 		http.Handle("/metrics", promhttp.Handler())
-		http.ListenAndServe(":8989", nil)
+		metricPort := os.Getenv("METRIC_PORT")
+		if metricPort == "" {
+			metricPort = "8989"
+		}
+		http.ListenAndServe(":"+metricPort, nil)
 	}()
 
 	ctx, cancel := context.WithCancel(context.Background())
