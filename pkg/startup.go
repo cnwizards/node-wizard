@@ -20,8 +20,7 @@ import (
 )
 
 const (
-	LeaderElectionLockName  string = "node-wizard-lock"
-	LeaderElectionNamespace string = "node-wizard"
+	LeaderElectionLockName string = "node-wizard-lock"
 )
 
 func Run() {
@@ -29,6 +28,11 @@ func Run() {
 	client, err := utils.GetKubernetesClient()
 	if err != nil {
 		log.Fatalf("Error getting kubernetes client: %v", err)
+	}
+	// Get the namespace of the pod
+	LeaderElectionNamespace := os.Getenv("POD_NAMESPACE")
+	if LeaderElectionNamespace == "" {
+		log.Fatalf("Error getting namespace of the pod")
 	}
 
 	go func() {
