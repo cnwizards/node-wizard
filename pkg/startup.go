@@ -2,6 +2,8 @@ package pkg
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"net/http"
 	"os"
 	"time"
@@ -48,15 +50,17 @@ func Run() {
 	ctr := controller.Setup()
 
 	id := os.Getenv("POD_NAME")
+	shaPodName := sha256.Sum256([]byte(id))
+	id = id + "-" + hex.EncodeToString(shaPodName[:])[:8]
 
 	lock := NewLock(LeaderElectionLockName, id, LeaderElectionNamespace, client)
 
 	leaderelection.RunOrDie(ctx, leaderelection.LeaderElectionConfig{
 		Lock:            lock,
 		ReleaseOnCancel: true,
-		LeaseDuration:   15 * time.Second,
-		RenewDeadline:   10 * time.Second,
-		RetryPeriod:     2 * time.Second,
+		LeaseDuration:   60 * time.Second,
+		RenewDeadline:   15 * time.Second,
+		RetryPeriod:     5 * time.Second,
 		Callbacks: leaderelection.LeaderCallbacks{
 			OnStartedLeading: func(_ context.Context) {
 				log.Infof("Started leading.")
