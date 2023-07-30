@@ -29,16 +29,18 @@ func Run() {
 	if err != nil {
 		log.Fatalf("Error getting kubernetes client: %v", err)
 	}
+
 	// Get the namespace of the pod
-	LeaderElectionNamespace := os.Getenv("POD_NAMESPACE")
-	if LeaderElectionNamespace == "" {
-		log.Fatalf("Error getting namespace of the pod")
+	LeaderElectionNamespace, find := os.LookupEnv("POD_NAMESPACE")
+	if LeaderElectionNamespace == "" || !find {
+		log.Fatalf("Error getting namespace of the pod.")
 	}
 
 	go func() {
 		http.Handle("/metrics", promhttp.Handler())
 		metricPort := os.Getenv("METRIC_PORT")
 		if metricPort == "" {
+			log.Debugf("METRIC_PORT not set, using default port 8989.")
 			metricPort = "8989"
 		}
 		http.ListenAndServe(":"+metricPort, nil)
